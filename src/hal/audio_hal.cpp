@@ -1,6 +1,10 @@
 /**
  * @file audio_hal.cpp
  * @brief Audio HAL implementation for CYD OS
+ * 
+ * Safely drives speaker on GPIO 26 using LEDC channel 0.
+ * To avoid DC coil saturation and brownouts on USB power, the pin is only
+ * attached to LEDC when playing a tone, and tri-stated (INPUT) when idle.
  */
 
 #include "audio_hal.h"
@@ -17,10 +21,8 @@ static uint8_t s_volume = 80;
 static bool    s_muted  = false;
 
 bool audio_init() {
-    ledcSetup(AUDIO_LEDC_CHANNEL, 1000, AUDIO_LEDC_RESOLUTION);
-    ledcAttachPin(PIN_SPEAKER, AUDIO_LEDC_CHANNEL);
-    ledcWrite(AUDIO_LEDC_CHANNEL, 0); // Start silent
-    Serial.println("[AUDIO] Speaker initialized on GPIO 26 (LEDC Channel 0)");
+    pinMode(PIN_SPEAKER, INPUT); // Default high-impedance safe state (no current draw)
+    Serial.println("[AUDIO] Speaker initialized in safe high-impedance mode on GPIO 26");
     return true;
 }
 
@@ -29,42 +31,48 @@ void audio_play_tone(uint32_t freq, uint32_t duration_ms) {
         return;
     }
 
-    ledcWriteTone(AUDIO_LEDC_CHANNEL, freq);
+    // Attach pin and set up tone only when playing
+    ledcSetup(AUDIO_LEDC_CHANNEL, freq, AUDIO_LEDC_RESOLUTION);
+    ledcAttachPin(PIN_SPEAKER, AUDIO_LEDC_CHANNEL);
+
     // Scale duty cycle by volume
     uint32_t duty = (s_volume * 128) / 100;
     ledcWrite(AUDIO_LEDC_CHANNEL, duty);
 
     if (duration_ms > 0) {
         delay(duration_ms);
+        // Turn off and detach to prevent continuous DC draw
         ledcWrite(AUDIO_LEDC_CHANNEL, 0);
+        ledcDetachPin(PIN_SPEAKER);
+        pinMode(PIN_SPEAKER, INPUT);
     }
 }
 
 void audio_stop() {
     ledcWrite(AUDIO_LEDC_CHANNEL, 0);
+    ledcDetachPin(PIN_SPEAKER);
+    pinMode(PIN_SPEAKER, INPUT);
 }
 
 void audio_play_click() {
     if (s_muted) return;
-    // High-pitch crisp 2.4kHz click for 8ms
     audio_play_tone(2400, 8);
 }
 
 void audio_play_alert() {
     if (s_muted) return;
     audio_play_tone(440, 60);
-    delay(30);
-    audio_play_tone(330, 90);
+    delay(20);
+    audio_play_tone(330, 80);
 }
 
 void audio_play_notification() {
     if (s_muted) return;
-    // Pleasant rising chime: C6 -> E6 -> G6
-    audio_play_tone(1046, 35);
-    delay(10);
-    audio_play_tone(1318, 35);
-    delay(10);
-    audio_play_tone(1568, 60);
+    audio_play_tone(1046, 30);
+    delay(15);
+    audio_play_tone(1318, 30);
+    delay(15);
+    audio_play_tone(1568, 50);
 }
 
 void audio_set_volume(uint8_t volume) {

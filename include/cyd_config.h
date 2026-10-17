@@ -16,12 +16,12 @@
 // ==========================================================================
 // Driver Selection
 // ==========================================================================
-#define DRIVER_ST7789    1  // Newer boards, USB-C models (2024+)
-#define DRIVER_ILI9341   2  // Classic CYD boards, single Micro-USB
+#define DRIVER_ILI9341   1  // Classic CYD boards (Single USB / Micro-USB) - Verified for ESP32-2432S028R
+#define DRIVER_ST7789    2  // Newer CYD boards (Dual USB / USB-C)
 
-// Default to ST7789 for recent boards — change if display looks scrambled
+// Default to ILI9341 as verified on user's hardware
 #ifndef CYD_DISPLAY_DRIVER
-#define CYD_DISPLAY_DRIVER DRIVER_ST7789
+#define CYD_DISPLAY_DRIVER DRIVER_ILI9341
 #endif
 
 // ==========================================================================
@@ -65,7 +65,7 @@ public:
             cfg.offset_rotation  = RotOffset;
             cfg.dummy_read_pixel = 8;
             cfg.dummy_read_bits  = 1;
-            cfg.readable         = false;
+            cfg.readable         = true;
             cfg.invert           = false;
             cfg.rgb_order        = false;
             cfg.dlen_16bit       = false;
@@ -87,18 +87,19 @@ public:
         // 4. Configure Touch Controller (XPT2046 on Software SPI)
         {
             auto cfg = _touch_instance.config();
-            cfg.x_min      = 300;
-            cfg.x_max      = 3900;
-            cfg.y_min      = 3700;
-            cfg.y_max      = 200;
+            cfg.x_min      = 185;          // Verified calibration from Launcher
+            cfg.x_max      = 3700;
+            cfg.y_min      = 280;
+            cfg.y_max      = 3850;
             cfg.pin_int    = -1;           // Polled mode (no IRQ)
             cfg.bus_shared = false;
             cfg.pin_sclk   = PIN_TOUCH_CLK;
             cfg.pin_mosi   = PIN_TOUCH_DIN;
             cfg.pin_miso   = PIN_TOUCH_DOUT;
             cfg.pin_cs     = PIN_TOUCH_CS;
-            cfg.freq       = 1000000;      // 1 MHz SoftSPI clock
+            cfg.freq       = 2500000;      // 2.5 MHz SoftSPI clock
             cfg.spi_host   = -1;           // -1 = bit-banged Software SPI
+            cfg.offset_rotation = 0;
             _touch_instance.config(cfg);
             _panel_instance.setTouch(&_touch_instance);
         }
@@ -110,12 +111,12 @@ public:
 // ==========================================================================
 // Driver-specific instantiation
 // ==========================================================================
-#if CYD_DISPLAY_DRIVER == DRIVER_ST7789
-    // ST7789: RotOffset=0, ExtraOffset=16 (RAM address offset)
+#if CYD_DISPLAY_DRIVER == DRIVER_ILI9341
+    // ILI9341: Native 240x320 portrait, 0 offset
+    class LGFX_CYD : public LGFX_CYD_Template<lgfx::Panel_ILI9341, 0, 0> {};
+#elif CYD_DISPLAY_DRIVER == DRIVER_ST7789
+    // ST7789: RotOffset=0, ExtraOffset=16 (RAM address offset on dual-USB models)
     class LGFX_CYD : public LGFX_CYD_Template<lgfx::Panel_ST7789, 0, 16> {};
-#elif CYD_DISPLAY_DRIVER == DRIVER_ILI9341
-    // ILI9341: RotOffset=2, ExtraOffset=8
-    class LGFX_CYD : public LGFX_CYD_Template<lgfx::Panel_ILI9341, 2, 8> {};
 #else
-    #error "CYD_DISPLAY_DRIVER must be DRIVER_ST7789 or DRIVER_ILI9341"
+    #error "CYD_DISPLAY_DRIVER must be DRIVER_ILI9341 or DRIVER_ST7789"
 #endif

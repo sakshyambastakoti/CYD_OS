@@ -94,19 +94,19 @@ void CalculatorApp::update_display() {
 lv_obj_t* CalculatorApp::create_screen() {
     m_screen = lv_obj_create(nullptr);
     lv_obj_add_style(m_screen, &UI::style_screen_bg, 0);
-    lv_obj_set_size(m_screen, 240, 274);
-    lv_obj_set_pos(m_screen, 0, 22);
+    lv_obj_set_size(m_screen, 240, 320);
+    lv_obj_set_pos(m_screen, 0, 0);
     lv_obj_clear_flag(m_screen, LV_OBJ_FLAG_SCROLLABLE);
 
-    // Display readout card
+    // Display readout card (below status bar)
     lv_obj_t* display_card = lv_obj_create(m_screen);
     lv_obj_add_style(display_card, &UI::style_card, 0);
-    lv_obj_set_size(display_card, 224, 46);
-    lv_obj_set_pos(display_card, 8, 4);
+    lv_obj_set_size(display_card, 224, 44);
+    lv_obj_set_pos(display_card, 8, 26);
     lv_obj_clear_flag(display_card, LV_OBJ_FLAG_SCROLLABLE);
 
     m_lbl_display = lv_label_create(display_card);
-    lv_obj_set_style_text_color(m_lbl_display, UI::THEME_COLOR_PRIMARY, 0);
+    lv_obj_set_style_text_color(m_lbl_display, THEME_COLOR_PRIMARY, 0);
     lv_obj_set_style_text_font(m_lbl_display, &lv_font_montserrat_20, 0);
     lv_obj_align(m_lbl_display, LV_ALIGN_RIGHT_MID, -4, 0);
     lv_label_set_text(m_lbl_display, m_display_buf);
@@ -120,10 +120,10 @@ lv_obj_t* CalculatorApp::create_screen() {
         {"0", ".", "=", "="}
     };
 
-    uint16_t start_y = 56;
+    uint16_t start_y = 76;
     uint16_t start_x = 8;
     uint16_t btn_w = 52;
-    uint16_t btn_h = 38;
+    uint16_t btn_h = 39;
     uint16_t spacing = 5;
 
     for (int r = 0; r < 5; r++) {
@@ -137,15 +137,15 @@ lv_obj_t* CalculatorApp::create_screen() {
                 // Wide '=' button
                 lv_obj_set_size(btn, btn_w * 2 + spacing, btn_h);
                 lv_obj_set_pos(btn, start_x + c * (btn_w + spacing), start_y + r * (btn_h + spacing));
-                lv_obj_set_style_bg_color(btn, UI::THEME_COLOR_PRIMARY, 0);
+                lv_obj_set_style_bg_color(btn, THEME_COLOR_PRIMARY, 0);
             } else {
                 lv_obj_set_size(btn, btn_w, btn_h);
                 lv_obj_set_pos(btn, start_x + c * (btn_w + spacing), start_y + r * (btn_h + spacing));
 
                 if (c == 3) {
-                    lv_obj_set_style_bg_color(btn, UI::THEME_COLOR_SECONDARY, 0);
+                    lv_obj_set_style_bg_color(btn, THEME_COLOR_SECONDARY, 0);
                 } else if (r == 0 && c == 0) {
-                    lv_obj_set_style_bg_color(btn, UI::THEME_COLOR_DANGER, 0);
+                    lv_obj_set_style_bg_color(btn, THEME_COLOR_DANGER, 0);
                 }
             }
 
@@ -153,7 +153,7 @@ lv_obj_t* CalculatorApp::create_screen() {
 
             lv_obj_t* lbl = lv_label_create(btn);
             lv_label_set_text(lbl, keys[r][c]);
-            lv_obj_set_style_text_color(lbl, UI::THEME_COLOR_TEXT_MAIN, 0);
+            lv_obj_set_style_text_color(lbl, THEME_COLOR_TEXT_MAIN, 0);
             lv_obj_set_style_text_font(lbl, &lv_font_montserrat_14, 0);
             lv_obj_center(lbl);
         }

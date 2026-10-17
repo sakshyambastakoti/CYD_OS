@@ -76,7 +76,13 @@ void power_update() {
         power_notify_activity();
     }
 
-    // 2. Inactivity sleep check
+    // 2. Prevent sleep during first 30 seconds after booting
+    if (now < 30000) {
+        s_last_activity_time = now;
+        return;
+    }
+
+    // 3. Inactivity sleep check
     if (!s_is_sleeping && s_timeout_seconds > 0) {
         if ((now - s_last_activity_time) >= (s_timeout_seconds * 1000)) {
             power_sleep();
@@ -88,7 +94,7 @@ void power_update() {
         static uint32_t last_ldr_check = 0;
         if (now - last_ldr_check > 500) {
             last_ldr_check = now;
-            uint8_t light_pct = adc_read_ldr_percent();
+            uint8_t light_pct = adc_get_light_percent();
             // Scale light 0-100% to backlight 40-255
             uint8_t target_bl = 40 + (uint8_t)(((uint32_t)light_pct * 215) / 100);
             display_set_brightness(target_bl);

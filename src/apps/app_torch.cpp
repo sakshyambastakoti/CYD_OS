@@ -33,11 +33,11 @@ void TorchApp::screen_torch_cb(lv_event_t* e) {
         app->m_orig_brightness = Services::storage_get_settings().brightness;
         HAL::display_set_brightness(255);
         lv_obj_set_style_bg_color(app->m_screen, lv_color_white(), 0);
-        lv_obj_set_style_bg_color(app->m_btn_screen_torch, UI::THEME_COLOR_PRIMARY, 0);
+        lv_obj_set_style_bg_color(app->m_btn_screen_torch, THEME_COLOR_PRIMARY, 0);
     } else {
         HAL::display_set_brightness(app->m_orig_brightness);
-        lv_obj_set_style_bg_color(app->m_screen, UI::THEME_COLOR_BG, 0);
-        lv_obj_set_style_bg_color(app->m_btn_screen_torch, UI::THEME_COLOR_SURFACE_ALT, 0);
+        lv_obj_set_style_bg_color(app->m_screen, THEME_COLOR_BG, 0);
+        lv_obj_set_style_bg_color(app->m_btn_screen_torch, THEME_COLOR_SURFACE_ALT, 0);
     }
 }
 
@@ -49,10 +49,10 @@ void TorchApp::led_torch_cb(lv_event_t* e) {
 
     if (app->m_led_torch_on) {
         HAL::led_set_rgb(true, true, true);
-        lv_obj_set_style_bg_color(app->m_btn_led_torch, UI::THEME_COLOR_PRIMARY, 0);
+        lv_obj_set_style_bg_color(app->m_btn_led_torch, THEME_COLOR_PRIMARY, 0);
     } else {
         HAL::led_set_rgb(false, false, false);
-        lv_obj_set_style_bg_color(app->m_btn_led_torch, UI::THEME_COLOR_SURFACE_ALT, 0);
+        lv_obj_set_style_bg_color(app->m_btn_led_torch, THEME_COLOR_SURFACE_ALT, 0);
     }
 }
 
@@ -63,10 +63,10 @@ void TorchApp::sos_cb(lv_event_t* e) {
     app->m_led_torch_on = false;
 
     if (app->m_sos_on) {
-        lv_obj_set_style_bg_color(app->m_btn_sos, UI::THEME_COLOR_DANGER, 0);
+        lv_obj_set_style_bg_color(app->m_btn_sos, THEME_COLOR_DANGER, 0);
     } else {
         HAL::led_set_rgb(false, false, false);
-        lv_obj_set_style_bg_color(app->m_btn_sos, UI::THEME_COLOR_SURFACE_ALT, 0);
+        lv_obj_set_style_bg_color(app->m_btn_sos, THEME_COLOR_SURFACE_ALT, 0);
     }
 }
 
@@ -84,15 +84,15 @@ void TorchApp::update() {
 lv_obj_t* TorchApp::create_screen() {
     m_screen = lv_obj_create(nullptr);
     lv_obj_add_style(m_screen, &UI::style_screen_bg, 0);
-    lv_obj_set_size(m_screen, 240, 274);
-    lv_obj_set_pos(m_screen, 0, 22);
+    lv_obj_set_size(m_screen, 240, 320);
+    lv_obj_set_pos(m_screen, 0, 0);
     lv_obj_clear_flag(m_screen, LV_OBJ_FLAG_SCROLLABLE);
 
-    // Title Card
+    // Title Card (below status bar)
     lv_obj_t* card = lv_obj_create(m_screen);
     lv_obj_add_style(card, &UI::style_card, 0);
     lv_obj_set_size(card, 224, 60);
-    lv_obj_set_pos(card, 8, 8);
+    lv_obj_set_pos(card, 8, 26);
     lv_obj_clear_flag(card, LV_OBJ_FLAG_SCROLLABLE);
 
     lv_obj_t* lbl_t = lv_label_create(card);
@@ -109,7 +109,7 @@ lv_obj_t* TorchApp::create_screen() {
     m_btn_screen_torch = lv_btn_create(m_screen);
     lv_obj_add_style(m_btn_screen_torch, &UI::style_btn, 0);
     lv_obj_set_size(m_btn_screen_torch, 224, 46);
-    lv_obj_set_pos(m_btn_screen_torch, 8, 76);
+    lv_obj_set_pos(m_btn_screen_torch, 8, 96);
     lv_obj_add_event_cb(m_btn_screen_torch, screen_torch_cb, LV_EVENT_CLICKED, this);
     lv_obj_t* lbl_s = lv_label_create(m_btn_screen_torch);
     lv_label_set_text(lbl_s, LV_SYMBOL_EYE_OPEN " Full Screen White Light");
@@ -120,7 +120,7 @@ lv_obj_t* TorchApp::create_screen() {
     m_btn_led_torch = lv_btn_create(m_screen);
     lv_obj_add_style(m_btn_led_torch, &UI::style_btn, 0);
     lv_obj_set_size(m_btn_led_torch, 224, 46);
-    lv_obj_set_pos(m_btn_led_torch, 8, 130);
+    lv_obj_set_pos(m_btn_led_torch, 8, 150);
     lv_obj_add_event_cb(m_btn_led_torch, led_torch_cb, LV_EVENT_CLICKED, this);
     lv_obj_t* lbl_l = lv_label_create(m_btn_led_torch);
     lv_label_set_text(lbl_l, LV_SYMBOL_IMAGE " Board RGB Torch");
@@ -131,7 +131,7 @@ lv_obj_t* TorchApp::create_screen() {
     m_btn_sos = lv_btn_create(m_screen);
     lv_obj_add_style(m_btn_sos, &UI::style_btn, 0);
     lv_obj_set_size(m_btn_sos, 224, 46);
-    lv_obj_set_pos(m_btn_sos, 8, 184);
+    lv_obj_set_pos(m_btn_sos, 8, 204);
     lv_obj_add_event_cb(m_btn_sos, sos_cb, LV_EVENT_CLICKED, this);
     lv_obj_t* lbl_sos = lv_label_create(m_btn_sos);
     lv_label_set_text(lbl_sos, LV_SYMBOL_WARNING " Emergency SOS Strobe");

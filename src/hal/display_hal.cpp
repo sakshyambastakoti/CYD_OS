@@ -49,25 +49,30 @@ namespace CydOS {
 namespace HAL {
 
 bool display_init() {
+    // Backlight hardware pin setup
+    pinMode(PIN_LCD_BL, OUTPUT);
+    digitalWrite(PIN_LCD_BL, HIGH);
+
     // Initialize LovyanGFX
     if (!g_display.init()) {
         Serial.println("[DISP] ERROR: LovyanGFX init failed!");
         return false;
     }
 
-    // Portrait orientation (0 = portrait for ST7789 with our config)
+    // Portrait orientation (0 = portrait)
     g_display.setRotation(0);
 
-    // Set initial brightness
+    // Set initial brightness (clamped to safe high-visibility range)
+    if (s_brightness < 100) s_brightness = 200;
     g_display.setBrightness(s_brightness);
     s_display_on = true;
 
-    // Clear display to black
+    // Clear display
     g_display.fillScreen(TFT_BLACK);
 
     Serial.printf("[DISP] Display initialized: %dx%d, driver=%s\n",
                   g_display.width(), g_display.height(),
-                  CYD_DISPLAY_DRIVER == DRIVER_ST7789 ? "ST7789" : "ILI9341");
+                  CYD_DISPLAY_DRIVER == DRIVER_ILI9341 ? "ILI9341" : "ST7789");
 
     // Initialize LVGL draw buffer (single buffer, partial rendering)
     lv_disp_draw_buf_init(&s_disp_draw_buf, s_draw_buf, NULL,

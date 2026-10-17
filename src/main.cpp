@@ -3,13 +3,6 @@
  * @brief CYD OS — Main Operating System Entrypoint (Phase 2)
  * 
  * Target: ESP32-2432S028R Cheap Yellow Display
- * Features:
- * - Bootloader and Service Orchestration
- * - Persistent Storage (Preferences NVS)
- * - Audio HAL feedback (GPIO 26)
- * - Power & Sleep Management
- * - Smartphone UI Shell (Status Bar, Home Screen, Quick Settings Shade, Nav Bar)
- * - Integrated Applications (Calculator, Stopwatch, Torch, Settings, Diagnostics, Touch Cal)
  */
 
 #include <Arduino.h>
@@ -47,29 +40,35 @@ using namespace CydOS;
 // ==========================================================================
 void setup() {
     Serial.begin(115200);
-    delay(250);
+    delay(500);
 
     Serial.println("\n==================================================");
     Serial.printf("   CYD OS v%s\n", CYD_OS_VERSION_STRING);
     Serial.println("   Target: ESP32-2432S028R (Cheap Yellow Display)");
     Serial.println("==================================================");
 
-    // 1. Core Event Bus & Storage (NVS)
+    // 1. Initialize LVGL Core FIRST
+    Serial.println("[BOOT] Initializing LVGL core...");
+    lv_init();
+
+    // 2. Hardware: LED & ADC
+    HAL::led_init();
+    HAL::led_set_rgb(false, true, false); // Boot indicator: Green
+    HAL::adc_init();
+
+    // 3. Audio HAL in safe high-impedance mode
+    HAL::audio_init();
+
+    // 4. Core Event Bus & Storage (NVS)
+    Serial.println("[BOOT] Initializing Storage & Settings...");
     Core::event_bus_init();
     Services::storage_init();
     auto& settings = Services::storage_get_settings();
 
-    // 2. Hardware Peripherals
-    HAL::audio_init();
     HAL::audio_set_volume(settings.volume);
     HAL::audio_set_muted(settings.audio_muted);
 
-    HAL::led_init();
-    HAL::led_set_rgb(false, true, false); // Boot indicator: Green
-
-    HAL::adc_init();
-
-    // 3. Display & Touch via LovyanGFX
+    // 5. Display & Touch via LovyanGFX
     Serial.println("[BOOT] Initializing Display...");
     if (!HAL::display_init()) {
         Serial.println("[BOOT] CRITICAL: Display initialization failed!");
@@ -84,24 +83,33 @@ void setup() {
     Serial.println("[BOOT] Initializing MicroSD card...");
     HAL::sd_init();
 
-    // 4. Power & Time Services
+    // 6. Power & Time Services
     HAL::power_init();
     HAL::power_set_timeout(settings.screen_timeout_sec);
     HAL::power_set_auto_brightness(settings.auto_brightness);
 
     Services::time_init();
 
-    // 5. UI Design System & Shell
-    Serial.println("[BOOT] Initializing UI Design System & Shell...");
+    // 7. UI Design System & Shell
+    Serial.println("[BOOT] Initializing UI Theme...");
     UI::theme_init();
+    Serial.println("[BOOT] Initializing Quick Settings...");
     UI::quick_settings_init();
+    Serial.println("[BOOT] Initializing Top Status Bar...");
     UI::status_bar_init();
+    Serial.println("[BOOT] Initializing Bottom Navigation Bar...");
     UI::nav_bar_init();
+    Serial.println("[BOOT] Initializing App Launcher & Home Screen...");
     UI::app_manager_init();
 
-    // Boot completed
-    HAL::led_set_rgb(false, false, false); // Turn off boot LED
-    HAL::audio_play_notification();       // Friendly boot chime
+    // Force an immediate LVGL refresh to guarantee first frame paints to glass
+    lv_timer_handler();
+
+    // Turn off boot indicator LED
+    HAL::led_set_rgb(false, false, false);
+
+    // Friendly boot complete sound feedback
+    HAL::audio_play_notification();
 
     Serial.printf("[BOOT] CYD OS Boot Complete! Free Heap: %u KB\n", ESP.getFreeHeap() / 1024);
     Serial.println("==================================================\n");
@@ -130,6 +138,6 @@ void loop() {
     // 4. Active Application Update Loop
     UI::app_manager_update();
 
-    // 5. Cooperate with FreeRTOS / watchdog
+    // 5. Yield to FreeRTOS watchdog
     delay(LVGL_TASK_PERIOD_MS);
 }

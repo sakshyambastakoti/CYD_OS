@@ -33,7 +33,7 @@ void DiagnosticsApp::update() {
 
     // 2. LDR
     if (m_lbl_ldr) {
-        lv_label_set_text_fmt(m_lbl_ldr, "LDR Ambient Light: %d%%", HAL::adc_read_ldr_percent());
+        lv_label_set_text_fmt(m_lbl_ldr, "LDR Ambient Light: %d%%", HAL::adc_get_light_percent());
     }
 
     // 3. Touch
@@ -41,10 +41,10 @@ void DiagnosticsApp::update() {
         if (HAL::touch_is_pressed()) {
             lv_label_set_text_fmt(m_lbl_touch, "Touch: PRESSED (X:%d, Y:%d)", 
                                   HAL::touch_get_x(), HAL::touch_get_y());
-            lv_obj_set_style_text_color(m_lbl_touch, UI::THEME_COLOR_PRIMARY, 0);
+            lv_obj_set_style_text_color(m_lbl_touch, THEME_COLOR_PRIMARY, 0);
         } else {
             lv_label_set_text(m_lbl_touch, "Touch: Released");
-            lv_obj_set_style_text_color(m_lbl_touch, UI::THEME_COLOR_TEXT_MUTED, 0);
+            lv_obj_set_style_text_color(m_lbl_touch, THEME_COLOR_TEXT_MUTED, 0);
         }
     }
 
@@ -60,15 +60,15 @@ void DiagnosticsApp::update() {
 lv_obj_t* DiagnosticsApp::create_screen() {
     m_screen = lv_obj_create(nullptr);
     lv_obj_add_style(m_screen, &UI::style_screen_bg, 0);
-    lv_obj_set_size(m_screen, 240, 274);
-    lv_obj_set_pos(m_screen, 0, 22);
+    lv_obj_set_size(m_screen, 240, 320);
+    lv_obj_set_pos(m_screen, 0, 0);
     lv_obj_clear_flag(m_screen, LV_OBJ_FLAG_SCROLLABLE);
 
-    // Header Card
+    // Header Card (below status bar)
     lv_obj_t* card_header = lv_obj_create(m_screen);
     lv_obj_add_style(card_header, &UI::style_card, 0);
     lv_obj_set_size(card_header, 224, 46);
-    lv_obj_set_pos(card_header, 8, 4);
+    lv_obj_set_pos(card_header, 8, 26);
     lv_obj_clear_flag(card_header, LV_OBJ_FLAG_SCROLLABLE);
 
     lv_obj_t* lbl_title = lv_label_create(card_header);
@@ -79,8 +79,8 @@ lv_obj_t* DiagnosticsApp::create_screen() {
     // Diagnostics Card
     lv_obj_t* card = lv_obj_create(m_screen);
     lv_obj_add_style(card, &UI::style_card, 0);
-    lv_obj_set_size(card, 224, 210);
-    lv_obj_set_pos(card, 8, 56);
+    lv_obj_set_size(card, 224, 212);
+    lv_obj_set_pos(card, 8, 76);
     lv_obj_clear_flag(card, LV_OBJ_FLAG_SCROLLABLE);
 
     m_lbl_heap = lv_label_create(card);
@@ -96,11 +96,11 @@ lv_obj_t* DiagnosticsApp::create_screen() {
     lv_obj_set_pos(m_lbl_sd, 4, 72);
     if (HAL::sd_is_mounted()) {
         lv_label_set_text_fmt(m_lbl_sd, "MicroSD: Mounted (%llu MB)", 
-                              HAL::sd_get_total_bytes() / (1024 * 1024));
-        lv_obj_set_style_text_color(m_lbl_sd, UI::THEME_COLOR_PRIMARY, 0);
+                              HAL::sd_get_total_size() / (1024 * 1024));
+        lv_obj_set_style_text_color(m_lbl_sd, THEME_COLOR_PRIMARY, 0);
     } else {
         lv_label_set_text(m_lbl_sd, "MicroSD: Not Detected");
-        lv_obj_set_style_text_color(m_lbl_sd, UI::THEME_COLOR_WARN, 0);
+        lv_obj_set_style_text_color(m_lbl_sd, THEME_COLOR_WARN, 0);
     }
 
     m_lbl_touch = lv_label_create(card);

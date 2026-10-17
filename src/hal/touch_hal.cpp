@@ -93,6 +93,12 @@ int16_t touch_get_y() {
 }
 
 bool touch_is_pressed() {
+    uint16_t x, y;
+    if (g_display.getTouch(&x, &y)) {
+        s_last_x = (int16_t)x;
+        s_last_y = (int16_t)y;
+        return true;
+    }
     return s_pressed;
 }
 

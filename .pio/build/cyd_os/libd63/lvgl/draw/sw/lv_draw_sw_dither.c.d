@@ -1,0 +1,30 @@
+.pio/build/cyd_os/libd63/lvgl/draw/sw/lv_draw_sw_dither.c.o: \
+ .pio/libdeps/cyd_os/lvgl/src/draw/sw/lv_draw_sw_dither.c \
+ .pio/libdeps/cyd_os/lvgl/src/draw/sw/lv_draw_sw_dither.h \
+ .pio/libdeps/cyd_os/lvgl/src/draw/sw/../../core/lv_obj_pos.h \
+ e:\downloads\cyd_os\.pio\libdeps\cyd_os\lvgl\src\misc\lv_area.h \
+ e:\downloads\cyd_os\.pio\libdeps\cyd_os\lvgl\src\lv_conf_internal.h \
+ e:\downloads\cyd_os\.pio\libdeps\cyd_os\lvgl\src\lv_conf_kconfig.h \
+ C:/Users/ACER/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/dio_qspi/include/sdkconfig.h \
+ C:/Users/ACER/.platformio/packages/framework-arduinoespressif32/tools/sdk/esp32/include/esp_common/include/esp_attr.h \
+ include/lv_conf.h \
+ .pio/libdeps/cyd_os/lvgl/src/draw/sw/lv_draw_sw_gradient.h \
+ .pio/libdeps/cyd_os/lvgl/src/draw/sw/../../misc/lv_color.h \
+ e:\downloads\cyd_os\.pio\libdeps\cyd_os\lvgl\src\lv_conf_internal.h \
+ .pio/libdeps/cyd_os/lvgl/src/draw/sw/../../misc/lv_assert.h \
+ .pio/libdeps/cyd_os/lvgl/src/draw/sw/../../misc/lv_log.h \
+ .pio/libdeps/cyd_os/lvgl/src/draw/sw/../../misc/lv_types.h \
+ .pio/libdeps/cyd_os/lvgl/src/draw/sw/../../misc/lv_mem.h \
+ .pio/libdeps/cyd_os/lvgl/src/draw/sw/../../misc/lv_math.h \
+ .pio/libdeps/cyd_os/lvgl/src/draw/sw/../../misc/lv_style.h \
+ e:\downloads\cyd_os\.pio\libdeps\cyd_os\lvgl\src\font\lv_font.h \
+ e:\downloads\cyd_os\.pio\libdeps\cyd_os\lvgl\src\lv_conf_internal.h \
+ e:\downloads\cyd_os\.pio\libdeps\cyd_os\lvgl\src\font\lv_symbol_def.h \
+ e:\downloads\cyd_os\.pio\libdeps\cyd_os\lvgl\src\misc\lv_area.h \
+ .pio/libdeps/cyd_os/lvgl/src/draw/sw/../../misc/lv_color.h \
+ .pio/libdeps/cyd_os/lvgl/src/draw/sw/../../misc/lv_area.h \
+ .pio/libdeps/cyd_os/lvgl/src/draw/sw/../../misc/lv_anim.h \
+ .pio/libdeps/cyd_os/lvgl/src/draw/sw/../../misc/lv_txt.h \
+ .pio/libdeps/cyd_os/lvgl/src/draw/sw/../../misc/lv_printf.h \
+ .pio/libdeps/cyd_os/lvgl/src/draw/sw/../../misc/lv_bidi.h \
+ .pio/libdeps/cyd_os/lvgl/src/draw/sw/../../misc/lv_style_gen.h

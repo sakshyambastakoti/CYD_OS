@@ -66,16 +66,16 @@ void SettingsApp::save_btn_cb(lv_event_t* e) {
 lv_obj_t* SettingsApp::create_screen() {
     m_screen = lv_obj_create(nullptr);
     lv_obj_add_style(m_screen, &UI::style_screen_bg, 0);
-    lv_obj_set_size(m_screen, 240, 274);
-    lv_obj_set_pos(m_screen, 0, 22);
+    lv_obj_set_size(m_screen, 240, 320);
+    lv_obj_set_pos(m_screen, 0, 0);
     // Allow vertical scrolling
     lv_obj_set_scroll_dir(m_screen, LV_DIR_VER);
 
-    // 1. Display Card
+    // 1. Display Card (below status bar)
     lv_obj_t* card_disp = lv_obj_create(m_screen);
     lv_obj_add_style(card_disp, &UI::style_card, 0);
     lv_obj_set_size(card_disp, 224, 110);
-    lv_obj_set_pos(card_disp, 8, 4);
+    lv_obj_set_pos(card_disp, 8, 26);
     lv_obj_clear_flag(card_disp, LV_OBJ_FLAG_SCROLLABLE);
 
     lv_obj_t* lbl_d = lv_label_create(card_disp);
@@ -93,7 +93,7 @@ lv_obj_t* SettingsApp::create_screen() {
     lv_slider_set_value(m_slider_bright, Services::storage_get_settings().brightness, LV_ANIM_OFF);
     lv_obj_set_size(m_slider_bright, 204, 14);
     lv_obj_set_pos(m_slider_bright, 2, 40);
-    lv_obj_set_style_bg_color(m_slider_bright, UI::THEME_COLOR_PRIMARY, LV_PART_INDICATOR);
+    lv_obj_set_style_bg_color(m_slider_bright, THEME_COLOR_PRIMARY, LV_PART_INDICATOR);
     lv_obj_add_event_cb(m_slider_bright, bright_slider_cb, LV_EVENT_VALUE_CHANGED, this);
 
     lv_obj_t* lbl_to = lv_label_create(card_disp);
@@ -116,7 +116,7 @@ lv_obj_t* SettingsApp::create_screen() {
     lv_obj_t* card_snd = lv_obj_create(m_screen);
     lv_obj_add_style(card_snd, &UI::style_card, 0);
     lv_obj_set_size(card_snd, 224, 76);
-    lv_obj_set_pos(card_snd, 8, 120);
+    lv_obj_set_pos(card_snd, 8, 142);
     lv_obj_clear_flag(card_snd, LV_OBJ_FLAG_SCROLLABLE);
 
     lv_obj_t* lbl_s = lv_label_create(card_snd);
@@ -129,14 +129,14 @@ lv_obj_t* SettingsApp::create_screen() {
     lv_slider_set_value(m_slider_vol, Services::storage_get_settings().volume, LV_ANIM_OFF);
     lv_obj_set_size(m_slider_vol, 204, 14);
     lv_obj_set_pos(m_slider_vol, 2, 28);
-    lv_obj_set_style_bg_color(m_slider_vol, UI::THEME_COLOR_SECONDARY, LV_PART_INDICATOR);
+    lv_obj_set_style_bg_color(m_slider_vol, THEME_COLOR_SECONDARY, LV_PART_INDICATOR);
     lv_obj_add_event_cb(m_slider_vol, vol_slider_cb, LV_EVENT_VALUE_CHANGED, this);
 
     // 3. Touch Calibration Card
     lv_obj_t* card_touch = lv_obj_create(m_screen);
     lv_obj_add_style(card_touch, &UI::style_card, 0);
     lv_obj_set_size(card_touch, 224, 76);
-    lv_obj_set_pos(card_touch, 8, 202);
+    lv_obj_set_pos(card_touch, 8, 224);
     lv_obj_clear_flag(card_touch, LV_OBJ_FLAG_SCROLLABLE);
 
     lv_obj_t* lbl_tc = lv_label_create(card_touch);
@@ -157,19 +157,19 @@ lv_obj_t* SettingsApp::create_screen() {
     lv_obj_t* btn_save = lv_btn_create(m_screen);
     lv_obj_add_style(btn_save, &UI::style_btn, 0);
     lv_obj_set_size(btn_save, 224, 36);
-    lv_obj_set_pos(btn_save, 8, 284);
-    lv_obj_set_style_bg_color(btn_save, UI::THEME_COLOR_PRIMARY, 0);
+    lv_obj_set_pos(btn_save, 8, 306);
+    lv_obj_set_style_bg_color(btn_save, THEME_COLOR_PRIMARY, 0);
     lv_obj_add_event_cb(btn_save, save_btn_cb, LV_EVENT_CLICKED, this);
     lv_obj_t* lbl_save = lv_label_create(btn_save);
     lv_label_set_text(lbl_save, LV_SYMBOL_SAVE " Save Settings to Flash");
-    lv_obj_set_style_text_color(lbl_save, UI::THEME_COLOR_BG, 0);
+    lv_obj_set_style_text_color(lbl_save, THEME_COLOR_BG, 0);
     lv_obj_center(lbl_save);
 
     // 5. About Device Card
     lv_obj_t* card_about = lv_obj_create(m_screen);
     lv_obj_add_style(card_about, &UI::style_card, 0);
     lv_obj_set_size(card_about, 224, 90);
-    lv_obj_set_pos(card_about, 8, 326);
+    lv_obj_set_pos(card_about, 8, 348);
     lv_obj_clear_flag(card_about, LV_OBJ_FLAG_SCROLLABLE);
 
     lv_obj_t* lbl_ab = lv_label_create(card_about);

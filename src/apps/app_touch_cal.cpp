@@ -64,13 +64,13 @@ void TouchCalApp::update() {
 
         if (m_step == 1) {
             lv_label_set_text(m_lbl_step, "Touch Top-Right Target (2/4)");
-            set_target_pos(215, 20);
+            set_target_pos(215, 45);
         } else if (m_step == 2) {
             lv_label_set_text(m_lbl_step, "Touch Bottom-Right Target (3/4)");
-            set_target_pos(215, 250);
+            set_target_pos(215, 270);
         } else if (m_step == 3) {
             lv_label_set_text(m_lbl_step, "Touch Bottom-Left Target (4/4)");
-            set_target_pos(25, 250);
+            set_target_pos(25, 270);
         } else if (m_step >= 4) {
             finish_calibration();
         }
@@ -80,8 +80,8 @@ void TouchCalApp::update() {
 lv_obj_t* TouchCalApp::create_screen() {
     m_screen = lv_obj_create(nullptr);
     lv_obj_add_style(m_screen, &UI::style_screen_bg, 0);
-    lv_obj_set_size(m_screen, 240, 274);
-    lv_obj_set_pos(m_screen, 0, 22);
+    lv_obj_set_size(m_screen, 240, 320);
+    lv_obj_set_pos(m_screen, 0, 0);
     lv_obj_clear_flag(m_screen, LV_OBJ_FLAG_SCROLLABLE);
 
     m_step = 0;
@@ -98,13 +98,13 @@ lv_obj_t* TouchCalApp::create_screen() {
     m_target = lv_obj_create(m_screen);
     lv_obj_remove_style_all(m_target);
     lv_obj_set_size(m_target, 24, 24);
-    lv_obj_set_style_bg_color(m_target, UI::THEME_COLOR_PRIMARY, 0);
+    lv_obj_set_style_bg_color(m_target, THEME_COLOR_PRIMARY, 0);
     lv_obj_set_style_bg_opa(m_target, LV_OPA_COVER, 0);
     lv_obj_set_style_radius(m_target, LV_RADIUS_CIRCLE, 0);
     lv_obj_set_style_border_width(m_target, 2, 0);
     lv_obj_set_style_border_color(m_target, lv_color_white(), 0);
 
-    set_target_pos(25, 20);
+    set_target_pos(25, 45);
 
     return m_screen;
 }

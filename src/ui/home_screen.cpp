@@ -63,20 +63,20 @@ lv_obj_t* home_screen_create() {
 
     s_home_screen = lv_obj_create(nullptr);
     lv_obj_add_style(s_home_screen, &style_screen_bg, 0);
-    lv_obj_set_size(s_home_screen, 240, 274);
-    lv_obj_set_pos(s_home_screen, 0, 22);
+    lv_obj_set_size(s_home_screen, 240, 320);
+    lv_obj_set_pos(s_home_screen, 0, 0);
     lv_obj_clear_flag(s_home_screen, LV_OBJ_FLAG_SCROLLABLE);
 
-    // 1. Clock & Date Widget Card
+    // 1. Clock & Date Widget Card (below 22px status bar)
     lv_obj_t* clock_card = lv_obj_create(s_home_screen);
     lv_obj_add_style(clock_card, &style_card, 0);
     lv_obj_set_size(clock_card, 224, 76);
-    lv_obj_set_pos(clock_card, 8, 4);
+    lv_obj_set_pos(clock_card, 8, 26);
     lv_obj_clear_flag(clock_card, LV_OBJ_FLAG_SCROLLABLE);
 
     s_lbl_clock = lv_label_create(clock_card);
     lv_obj_set_style_text_color(s_lbl_clock, THEME_COLOR_TEXT_MAIN, 0);
-    lv_obj_set_style_text_font(s_lbl_clock, &lv_font_montserrat_28, 0);
+    lv_obj_set_style_text_font(s_lbl_clock, &lv_font_montserrat_24, 0);
     lv_obj_set_pos(s_lbl_clock, 6, 2);
     lv_label_set_text(s_lbl_clock, "12:00");
 
@@ -92,9 +92,9 @@ lv_obj_t* home_screen_create() {
 
     // 2. Apps Launcher Grid: 2 rows of 4 columns
     uint16_t start_x = 10;
-    uint16_t start_y = 88;
+    uint16_t start_y = 110;
     uint16_t col_w = 54;
-    uint16_t row_h = 76;
+    uint16_t row_h = 84;
 
     for (size_t i = 0; i < sizeof(s_apps) / sizeof(s_apps[0]); i++) {
         uint8_t row = i / 4;

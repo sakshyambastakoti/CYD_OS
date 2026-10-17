@@ -7,10 +7,6 @@
 
 #include <lvgl.h>
 
-namespace CydOS {
-namespace UI {
-
-// Color definitions (LVGL 16-bit color macros)
 #define THEME_COLOR_BG           lv_color_hex(0x10111A)
 #define THEME_COLOR_SURFACE      lv_color_hex(0x1C1D2A)
 #define THEME_COLOR_SURFACE_ALT  lv_color_hex(0x27293D)
@@ -23,6 +19,9 @@ namespace UI {
 #define THEME_COLOR_SUCCESS      lv_color_hex(0x2ECC71)
 #define THEME_COLOR_WARN         lv_color_hex(0xF39C12)
 #define THEME_COLOR_DANGER       lv_color_hex(0xE74C3C)
+
+namespace CydOS {
+namespace UI {
 
 // Shared styles
 extern lv_style_t style_screen_bg;

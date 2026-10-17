@@ -36,7 +36,13 @@ bool storage_init() {
     }
 
     s_settings.brightness         = s_prefs.getUChar("bright", DEFAULT_BRIGHTNESS);
-    s_settings.screen_timeout_sec = s_prefs.getUInt("timeout", 30);
+    if (s_settings.brightness < 60) s_settings.brightness = DEFAULT_BRIGHTNESS;
+
+    s_settings.screen_timeout_sec = s_prefs.getUInt("timeout", 60);
+    if (s_settings.screen_timeout_sec != 0 && s_settings.screen_timeout_sec < 15) {
+        s_settings.screen_timeout_sec = 60;
+    }
+
     s_settings.auto_brightness    = s_prefs.getBool("autobright", false);
     s_settings.volume             = s_prefs.getUChar("volume", 80);
     s_settings.audio_muted        = s_prefs.getBool("muted", false);

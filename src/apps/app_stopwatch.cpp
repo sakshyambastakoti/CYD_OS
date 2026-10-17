@@ -32,10 +32,10 @@ void StopwatchApp::start_stop_cb(lv_event_t* e) {
     if (app->m_running) {
         app->m_start_time = millis() - app->m_elapsed_time;
         lv_label_set_text(app->m_lbl_start_stop, "PAUSE");
-        lv_obj_set_style_bg_color(app->m_btn_start_stop, UI::THEME_COLOR_WARN, 0);
+        lv_obj_set_style_bg_color(app->m_btn_start_stop, THEME_COLOR_WARN, 0);
     } else {
         lv_label_set_text(app->m_lbl_start_stop, "START");
-        lv_obj_set_style_bg_color(app->m_btn_start_stop, UI::THEME_COLOR_PRIMARY, 0);
+        lv_obj_set_style_bg_color(app->m_btn_start_stop, THEME_COLOR_PRIMARY, 0);
     }
 }
 
@@ -82,52 +82,52 @@ void StopwatchApp::update() {
 lv_obj_t* StopwatchApp::create_screen() {
     m_screen = lv_obj_create(nullptr);
     lv_obj_add_style(m_screen, &UI::style_screen_bg, 0);
-    lv_obj_set_size(m_screen, 240, 274);
-    lv_obj_set_pos(m_screen, 0, 22);
+    lv_obj_set_size(m_screen, 240, 320);
+    lv_obj_set_pos(m_screen, 0, 0);
     lv_obj_clear_flag(m_screen, LV_OBJ_FLAG_SCROLLABLE);
 
-    // Timer Card
+    // Timer Card (below status bar)
     lv_obj_t* card = lv_obj_create(m_screen);
     lv_obj_add_style(card, &UI::style_card, 0);
-    lv_obj_set_size(card, 224, 90);
-    lv_obj_set_pos(card, 8, 8);
+    lv_obj_set_size(card, 224, 76);
+    lv_obj_set_pos(card, 8, 26);
     lv_obj_clear_flag(card, LV_OBJ_FLAG_SCROLLABLE);
 
     m_lbl_time = lv_label_create(card);
-    lv_obj_set_style_text_color(m_lbl_time, UI::THEME_COLOR_PRIMARY, 0);
-    lv_obj_set_style_text_font(m_lbl_time, &lv_font_montserrat_28, 0);
+    lv_obj_set_style_text_color(m_lbl_time, THEME_COLOR_PRIMARY, 0);
+    lv_obj_set_style_text_font(m_lbl_time, &lv_font_montserrat_24, 0);
     lv_obj_center(m_lbl_time);
     lv_label_set_text(m_lbl_time, "00:00.0");
 
     // Action Buttons
     m_btn_start_stop = lv_btn_create(m_screen);
     lv_obj_add_style(m_btn_start_stop, &UI::style_btn, 0);
-    lv_obj_set_size(m_btn_start_stop, 108, 44);
-    lv_obj_set_pos(m_btn_start_stop, 8, 106);
-    lv_obj_set_style_bg_color(m_btn_start_stop, UI::THEME_COLOR_PRIMARY, 0);
+    lv_obj_set_size(m_btn_start_stop, 108, 42);
+    lv_obj_set_pos(m_btn_start_stop, 8, 108);
+    lv_obj_set_style_bg_color(m_btn_start_stop, THEME_COLOR_PRIMARY, 0);
     lv_obj_add_event_cb(m_btn_start_stop, start_stop_cb, LV_EVENT_CLICKED, this);
     m_lbl_start_stop = lv_label_create(m_btn_start_stop);
     lv_label_set_text(m_lbl_start_stop, "START");
-    lv_obj_set_style_text_color(m_lbl_start_stop, UI::THEME_COLOR_BG, 0);
+    lv_obj_set_style_text_color(m_lbl_start_stop, THEME_COLOR_BG, 0);
     lv_obj_set_style_text_font(m_lbl_start_stop, &lv_font_montserrat_14, 0);
     lv_obj_center(m_lbl_start_stop);
 
     lv_obj_t* btn_reset = lv_btn_create(m_screen);
     lv_obj_add_style(btn_reset, &UI::style_btn, 0);
-    lv_obj_set_size(btn_reset, 108, 44);
-    lv_obj_set_pos(btn_reset, 124, 106);
+    lv_obj_set_size(btn_reset, 108, 42);
+    lv_obj_set_pos(btn_reset, 124, 108);
     lv_obj_add_event_cb(btn_reset, reset_lap_cb, LV_EVENT_CLICKED, this);
     lv_obj_t* lbl_r = lv_label_create(btn_reset);
     lv_label_set_text(lbl_r, "LAP / RESET");
-    lv_obj_set_style_text_color(lbl_r, UI::THEME_COLOR_TEXT_MAIN, 0);
+    lv_obj_set_style_text_color(lbl_r, THEME_COLOR_TEXT_MAIN, 0);
     lv_obj_set_style_text_font(lbl_r, &lv_font_montserrat_12, 0);
     lv_obj_center(lbl_r);
 
     // Laps card
     lv_obj_t* laps_card = lv_obj_create(m_screen);
     lv_obj_add_style(laps_card, &UI::style_card, 0);
-    lv_obj_set_size(laps_card, 224, 104);
-    lv_obj_set_pos(laps_card, 8, 158);
+    lv_obj_set_size(laps_card, 224, 130);
+    lv_obj_set_pos(laps_card, 8, 156);
     lv_obj_clear_flag(laps_card, LV_OBJ_FLAG_SCROLLABLE);
 
     m_lbl_laps = lv_label_create(laps_card);

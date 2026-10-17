@@ -26,6 +26,10 @@ void led_init();
  */
 void led_set(bool red, bool green, bool blue);
 
+inline void led_set_rgb(bool red, bool green, bool blue) {
+    led_set(red, green, blue);
+}
+
 /**
  * @brief Set LED to a specific named color
  */
