@@ -9,10 +9,10 @@
 // CYD OS Version
 // ==========================================================================
 #define CYD_OS_VERSION_MAJOR    0
-#define CYD_OS_VERSION_MINOR    1
+#define CYD_OS_VERSION_MINOR    2
 #define CYD_OS_VERSION_PATCH    0
-#define CYD_OS_VERSION_STRING   "0.1.0-alpha"
-#define CYD_OS_BUILD_PHASE      "Phase A - Hardware Diagnostics"
+#define CYD_OS_VERSION_STRING   "0.2.0-beta"
+#define CYD_OS_BUILD_PHASE      "Phase 2 - Smartphone Shell & Apps"
 
 // ==========================================================================
 // LVGL Configuration
