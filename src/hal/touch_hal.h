@@ -44,5 +44,15 @@ void touch_start_calibration();
  */
 bool touch_is_calibrating();
 
+/**
+ * @brief Get raw ADC reading from touch controller
+ */
+bool touch_get_raw(int16_t* rx, int16_t* ry);
+
+/**
+ * @brief Apply 8-point affine calibration parameters to LovyanGFX
+ */
+void touch_set_calibration(const uint16_t* cal);
+
 } // namespace HAL
 } // namespace CydOS

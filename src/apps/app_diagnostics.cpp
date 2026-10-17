@@ -39,7 +39,7 @@ void DiagnosticsApp::update() {
     // 3. Touch
     if (m_lbl_touch) {
         if (HAL::touch_is_pressed()) {
-            lv_label_set_text_fmt(m_lbl_touch, "Touch: PRESSED (X:%d, Y:%d)", 
+            lv_label_set_text_fmt(m_lbl_touch, "Touch: (%d, %d)", 
                                   HAL::touch_get_x(), HAL::touch_get_y());
             lv_obj_set_style_text_color(m_lbl_touch, THEME_COLOR_PRIMARY, 0);
         } else {

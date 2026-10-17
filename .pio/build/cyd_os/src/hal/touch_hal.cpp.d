@@ -489,4 +489,4 @@
  .pio/libdeps/cyd_os/LovyanGFX/src/lgfx/v1/touch/Touch_TT21xxx.hpp \
  .pio/libdeps/cyd_os/LovyanGFX/src/lgfx/v1/touch/Touch_XPT2046.hpp \
  .pio/libdeps/cyd_os/LovyanGFX/src/lgfx/v1/touch/Touch_RA8875.hpp \
- include/pin_config.h include/app_config.h
+ include/pin_config.h include/app_config.h src/services/storage_service.h

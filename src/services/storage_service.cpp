@@ -50,7 +50,23 @@ bool storage_init() {
     s_settings.touch_calibrated   = s_prefs.getBool("cal_ok", false);
 
     if (s_settings.touch_calibrated) {
-        s_prefs.getBytes("cal_data", s_settings.touch_cal, sizeof(s_settings.touch_cal));
+        size_t len = s_prefs.getBytes("cal_data", s_settings.touch_cal, sizeof(s_settings.touch_cal));
+        bool valid = (len == sizeof(s_settings.touch_cal));
+        if (valid) {
+            for (int i = 0; i < 8; i++) {
+                if (s_settings.touch_cal[i] < 100 || s_settings.touch_cal[i] > 4000) {
+                    valid = false;
+                    break;
+                }
+            }
+        }
+        if (!valid) {
+            Serial.println("[STORAGE] Stored touch calibration was invalid or zeroed. Discarding.");
+            s_settings.touch_calibrated = false;
+            memset(s_settings.touch_cal, 0, sizeof(s_settings.touch_cal));
+            s_prefs.putBool("cal_ok", false);
+            s_prefs.remove("cal_data");
+        }
     }
 
     String ssid = s_prefs.getString("wifi_ssid", "");

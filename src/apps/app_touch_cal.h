@@ -30,6 +30,7 @@ private:
     uint8_t   m_step; // 0 = TL, 1 = TR, 2 = BR, 3 = BL, 4 = Done
     uint32_t  m_last_step_time;
     bool      m_waiting_release;
+    int16_t   m_samples[4][2]; // [step][0=X, 1=Y]
 
     void set_target_pos(int16_t x, int16_t y);
     void finish_calibration();

@@ -24,10 +24,15 @@
 #define CYD_DISPLAY_DRIVER DRIVER_ST7789
 #endif
 
+// Default touch rotation offset (ST7789 requires offset 2 to cancel 180-deg panel difference)
+#ifndef CYD_TOUCH_ROTATION
+#define CYD_TOUCH_ROTATION 2
+#endif
+
 // ==========================================================================
 // LovyanGFX Device Template (Matched with verified hardware profile)
 // ==========================================================================
-template <typename TPanel, int OffsetRot = 0, int DummyRead = 16>
+template <typename TPanel, int OffsetRot = 0, int DummyRead = 16, int TouchRot = CYD_TOUCH_ROTATION>
 class LGFX_CYD_Template : public lgfx::LGFX_Device {
     TPanel              _panel_instance;
     lgfx::Bus_SPI       _bus_instance;
@@ -88,18 +93,19 @@ public:
         // 4. Configure XPT2046 Resistive Touch Controller (SoftSPI)
         {
             auto cfg = _touch_instance.config();
-            cfg.x_min      = 300;
-            cfg.x_max      = 3900;
-            cfg.y_min      = 3700;
-            cfg.y_max      = 200;
-            cfg.pin_int    = -1;             // Polled touch
-            cfg.bus_shared = false;          // Dedicated touchscreen bus
-            cfg.pin_sclk   = PIN_TOUCH_CLK;  // GPIO 25 (T_CLK)
-            cfg.pin_mosi   = PIN_TOUCH_DIN;  // GPIO 32 (T_DIN)
-            cfg.pin_miso   = PIN_TOUCH_DOUT; // GPIO 39 (T_OUT)
-            cfg.pin_cs     = PIN_TOUCH_CS;   // GPIO 33 (T_CS)
-            cfg.freq       = 2500000;        // 2.5 MHz SPI clock for fast touch sampling
-            cfg.spi_host   = -1;             // -1: Use bit-banged Software SPI
+            cfg.x_min           = 300;
+            cfg.x_max           = 3900;
+            cfg.y_min           = 3700;
+            cfg.y_max           = 200;
+            cfg.offset_rotation = TouchRot;       // 2 for ST7789, 0 for ILI9341
+            cfg.pin_int         = -1;             // Polled touch
+            cfg.bus_shared      = false;          // Dedicated touchscreen bus
+            cfg.pin_sclk        = PIN_TOUCH_CLK;  // GPIO 25 (T_CLK)
+            cfg.pin_mosi        = PIN_TOUCH_DIN;  // GPIO 32 (T_DIN)
+            cfg.pin_miso        = PIN_TOUCH_DOUT; // GPIO 39 (T_OUT)
+            cfg.pin_cs          = PIN_TOUCH_CS;   // GPIO 33 (T_CS)
+            cfg.freq            = 2500000;        // 2.5 MHz SoftSPI clock
+            cfg.spi_host        = -1;             // -1: Use bit-banged Software SPI
             _touch_instance.config(cfg);
             _panel_instance.setTouch(&_touch_instance);
         }
@@ -112,18 +118,18 @@ public:
 // Driver-specific instantiation
 // ==========================================================================
 #if CYD_DISPLAY_DRIVER == DRIVER_ST7789
-    // ST7789: Verified working profile for user's CYD board
-    class LGFX_CYD : public LGFX_CYD_Template<lgfx::Panel_ST7789, 0, 16> {};
+    // ST7789: Panel OffsetRot=0, ExtraOffset=16, TouchRot=2 (180 deg offset from panel)
+    class LGFX_CYD : public LGFX_CYD_Template<lgfx::Panel_ST7789, 0, 16, 2> {};
 #elif CYD_DISPLAY_DRIVER == DRIVER_ILI9341
     // ILI9341 with rotation offset 2 (Sunton classic CYD)
-    class LGFX_CYD : public LGFX_CYD_Template<lgfx::Panel_ILI9341, 2, 8> {};
+    class LGFX_CYD : public LGFX_CYD_Template<lgfx::Panel_ILI9341, 2, 8, 0> {};
 #elif CYD_DISPLAY_DRIVER == DRIVER_ILI9341_0
     // ILI9341 with rotation offset 0
-    class LGFX_CYD : public LGFX_CYD_Template<lgfx::Panel_ILI9341, 0, 8> {};
+    class LGFX_CYD : public LGFX_CYD_Template<lgfx::Panel_ILI9341, 0, 8, 2> {};
 #elif CYD_DISPLAY_DRIVER == DRIVER_ST7796
     // ST7796 panel
-    class LGFX_CYD : public LGFX_CYD_Template<lgfx::Panel_ST7796, 0, 8> {};
+    class LGFX_CYD : public LGFX_CYD_Template<lgfx::Panel_ST7796, 0, 8, 2> {};
 #else
     // Fallback default: ST7789
-    class LGFX_CYD : public LGFX_CYD_Template<lgfx::Panel_ST7789, 0, 16> {};
+    class LGFX_CYD : public LGFX_CYD_Template<lgfx::Panel_ST7789, 0, 16, 2> {};
 #endif
