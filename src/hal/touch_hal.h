@@ -38,6 +38,7 @@ bool touch_is_pressed();
  * @brief Enable/disable touch calibration mode
  */
 void touch_start_calibration();
+void touch_finish_calibration();
 
 /**
  * @brief Check if touch calibration is in progress

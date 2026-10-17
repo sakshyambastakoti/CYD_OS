@@ -25,9 +25,9 @@
 #endif
 
 // Default touch rotation offset:
-// 6 = Inverts X to match portrait panel while preserving Y orientation
+// 0 = Native orientation (ST7789 portrait: 240x320)
 #ifndef CYD_TOUCH_ROTATION
-#define CYD_TOUCH_ROTATION 6
+#define CYD_TOUCH_ROTATION 0
 #endif
 
 // ==========================================================================
@@ -94,11 +94,11 @@ public:
         // 4. Configure XPT2046 Resistive Touch Controller (SoftSPI)
         {
             auto cfg = _touch_instance.config();
-            cfg.x_min           = 300;
-            cfg.x_max           = 3900;
-            cfg.y_min           = 3700;
-            cfg.y_max           = 200;
-            cfg.offset_rotation = TouchRot;       // 2 for ST7789, 0 for ILI9341
+            cfg.x_min           = 200;
+            cfg.x_max           = 3850;
+            cfg.y_min           = 3800;
+            cfg.y_max           = 240;
+            cfg.offset_rotation = TouchRot;       // 0 for ST7789 native portrait
             cfg.pin_int         = -1;             // Polled touch
             cfg.bus_shared      = false;          // Dedicated touchscreen bus
             cfg.pin_sclk        = PIN_TOUCH_CLK;  // GPIO 25 (T_CLK)
