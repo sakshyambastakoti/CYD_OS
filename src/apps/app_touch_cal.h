@@ -22,18 +22,17 @@ public:
     void destroy_screen() override;
     void update() override;
 
+    void run_calibration();
+
 private:
     lv_obj_t* m_screen;
-    lv_obj_t* m_target;
-    lv_obj_t* m_lbl_step;
+    lv_obj_t* m_lbl_status;
+    lv_obj_t* m_btn_start;
+    lv_obj_t* m_btn_reset;
+    bool      m_calibrating;
 
-    uint8_t   m_step; // 0 = TL, 1 = TR, 2 = BR, 3 = BL, 4 = Done
-    uint32_t  m_last_step_time;
-    bool      m_waiting_release;
-    int16_t   m_samples[4][2]; // [step][0=X, 1=Y]
-
-    void set_target_pos(int16_t x, int16_t y);
-    void finish_calibration();
+    static void start_calibration_cb(lv_event_t* e);
+    static void reset_calibration_cb(lv_event_t* e);
 };
 
 } // namespace Apps

@@ -24,9 +24,10 @@
 #define CYD_DISPLAY_DRIVER DRIVER_ST7789
 #endif
 
-// Default touch rotation offset (ST7789 requires offset 2 to cancel 180-deg panel difference)
+// Default touch rotation offset:
+// 6 = Inverts X to match portrait panel while preserving Y orientation
 #ifndef CYD_TOUCH_ROTATION
-#define CYD_TOUCH_ROTATION 2
+#define CYD_TOUCH_ROTATION 6
 #endif
 
 // ==========================================================================
@@ -118,8 +119,8 @@ public:
 // Driver-specific instantiation
 // ==========================================================================
 #if CYD_DISPLAY_DRIVER == DRIVER_ST7789
-    // ST7789: Panel OffsetRot=0, ExtraOffset=16, TouchRot=2 (180 deg offset from panel)
-    class LGFX_CYD : public LGFX_CYD_Template<lgfx::Panel_ST7789, 0, 16, 2> {};
+    // ST7789: Panel OffsetRot=0, ExtraOffset=16, TouchRot=6 (Inverts X while preserving Y)
+    class LGFX_CYD : public LGFX_CYD_Template<lgfx::Panel_ST7789, 0, 16, CYD_TOUCH_ROTATION> {};
 #elif CYD_DISPLAY_DRIVER == DRIVER_ILI9341
     // ILI9341 with rotation offset 2 (Sunton classic CYD)
     class LGFX_CYD : public LGFX_CYD_Template<lgfx::Panel_ILI9341, 2, 8, 0> {};
@@ -131,5 +132,5 @@ public:
     class LGFX_CYD : public LGFX_CYD_Template<lgfx::Panel_ST7796, 0, 8, 2> {};
 #else
     // Fallback default: ST7789
-    class LGFX_CYD : public LGFX_CYD_Template<lgfx::Panel_ST7789, 0, 16, 2> {};
+    class LGFX_CYD : public LGFX_CYD_Template<lgfx::Panel_ST7789, 0, 16, CYD_TOUCH_ROTATION> {};
 #endif
