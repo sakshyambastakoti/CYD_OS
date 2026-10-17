@@ -38,8 +38,8 @@ static void lvgl_flush_cb(lv_disp_drv_t *drv, const lv_area_t *area, lv_color_t 
     uint32_t h = (area->y2 - area->y1 + 1);
 
     g_display.startWrite();
-    g_display.setAddrWindow(area->x1, area->y1, w, h);
-    g_display.writePixels((lgfx::rgb565_t *)&color_p->full, w * h);
+    g_display.pushImageDMA(area->x1, area->y1, w, h, (const lgfx::swap565_t *)&color_p->full);
+    g_display.waitDMA();
     g_display.endWrite();
 
     lv_disp_flush_ready(drv);
@@ -72,7 +72,7 @@ bool display_init() {
 
     Serial.printf("[DISP] Display initialized: %dx%d, driver=%s\n",
                   g_display.width(), g_display.height(),
-                  CYD_DISPLAY_DRIVER == DRIVER_ILI9341 ? "ILI9341" : "ST7789");
+                  CYD_DISPLAY_DRIVER == DRIVER_ST7789 ? "ST7789" : "ILI9341");
 
     // Initialize LVGL draw buffer (single buffer, partial rendering)
     lv_disp_draw_buf_init(&s_disp_draw_buf, s_draw_buf, NULL,
