@@ -106,10 +106,11 @@ lv_obj_t* home_screen_create() {
         // Icon Button
         lv_obj_t* btn = lv_btn_create(s_home_screen);
         lv_obj_add_style(btn, &style_btn, 0);
-        lv_obj_set_size(btn, 44, 44);
-        lv_obj_set_pos(btn, x + 2, y);
+        lv_obj_set_size(btn, 46, 46);
+        lv_obj_set_pos(btn, x + 1, y);
         lv_obj_set_style_bg_color(btn, lv_color_hex(s_apps[i].color_hex), 0);
         lv_obj_set_style_radius(btn, 12, 0);
+        lv_obj_set_ext_click_area(btn, 6);
         lv_obj_add_event_cb(btn, app_btn_click_event, LV_EVENT_CLICKED, (void*)(uintptr_t)i);
 
         lv_obj_t* icon = lv_label_create(btn);
@@ -118,13 +119,15 @@ lv_obj_t* home_screen_create() {
         lv_obj_set_style_text_font(icon, &lv_font_montserrat_14, 0);
         lv_obj_center(icon);
 
-        // Name Label
+        // Name Label (also clickable for effortless tap response)
         lv_obj_t* lbl = lv_label_create(s_home_screen);
         lv_obj_add_style(lbl, &style_subtitle, 0);
         lv_label_set_text(lbl, s_apps[i].name);
-        lv_obj_set_pos(lbl, x - 2, y + 48);
-        lv_obj_set_size(lbl, 52, 18);
+        lv_obj_set_pos(lbl, x - 2, y + 50);
+        lv_obj_set_size(lbl, 52, 20);
         lv_obj_set_style_text_align(lbl, LV_TEXT_ALIGN_CENTER, 0);
+        lv_obj_add_flag(lbl, LV_OBJ_FLAG_CLICKABLE);
+        lv_obj_add_event_cb(lbl, app_btn_click_event, LV_EVENT_CLICKED, (void*)(uintptr_t)i);
     }
 
     home_screen_update();

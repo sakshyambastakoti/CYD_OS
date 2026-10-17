@@ -33,16 +33,7 @@ static void lvgl_touch_read_cb(lv_indev_drv_t *drv, lv_indev_data_t *data) {
     uint16_t tx, ty;
     bool touched = g_display.getTouch(&tx, &ty);
 
-    uint32_t now = millis();
-
     if (touched) {
-        // Debounce: only accept new touch if enough time since last release
-        if (!s_pressed && (now - s_last_touch_time) < TOUCH_DEBOUNCE_MS) {
-            data->state = LV_INDEV_STATE_REL;
-            return;
-        }
-
-        // Cache coordinates (prevent false 0,0 on release)
         s_last_x = (int16_t)tx;
         s_last_y = (int16_t)ty;
         s_pressed = true;
@@ -51,13 +42,10 @@ static void lvgl_touch_read_cb(lv_indev_drv_t *drv, lv_indev_data_t *data) {
         data->point.x = s_last_x;
         data->point.y = s_last_y;
     } else {
-        if (s_pressed) {
-            s_last_touch_time = now;  // Record release time for debounce
-        }
         s_pressed = false;
 
         data->state = LV_INDEV_STATE_REL;
-        // Return last known coordinates (not 0,0)
+        // Keep last coordinates to allow LVGL click completion
         data->point.x = s_last_x;
         data->point.y = s_last_y;
     }
@@ -93,12 +81,6 @@ int16_t touch_get_y() {
 }
 
 bool touch_is_pressed() {
-    uint16_t x, y;
-    if (g_display.getTouch(&x, &y)) {
-        s_last_x = (int16_t)x;
-        s_last_y = (int16_t)y;
-        return true;
-    }
     return s_pressed;
 }
 

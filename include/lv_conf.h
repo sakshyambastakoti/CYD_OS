@@ -44,7 +44,7 @@
    HAL SETTINGS
  *====================*/
 #define LV_DISP_DEF_REFR_PERIOD    30   // 33 FPS target
-#define LV_INDEV_DEF_READ_PERIOD   30   // Touch read period
+#define LV_INDEV_DEF_READ_PERIOD   15   // Touch read period (66 Hz for fast tap response)
 #define LV_TICK_CUSTOM              1
 #define LV_TICK_CUSTOM_INCLUDE      "Arduino.h"
 #define LV_TICK_CUSTOM_SYS_TIME_EXPR (millis())

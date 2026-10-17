@@ -56,6 +56,7 @@ void nav_bar_init() {
     s_btn_back = lv_btn_create(s_nav_cont);
     lv_obj_remove_style_all(s_btn_back);
     lv_obj_set_size(s_btn_back, 64, 22);
+    lv_obj_set_ext_click_area(s_btn_back, 4);
     lv_obj_add_event_cb(s_btn_back, nav_back_event, LV_EVENT_CLICKED, nullptr);
     lv_obj_t* lbl_b = lv_label_create(s_btn_back);
     lv_label_set_text(lbl_b, LV_SYMBOL_LEFT " Back");
@@ -67,6 +68,7 @@ void nav_bar_init() {
     s_btn_home = lv_btn_create(s_nav_cont);
     lv_obj_remove_style_all(s_btn_home);
     lv_obj_set_size(s_btn_home, 64, 22);
+    lv_obj_set_ext_click_area(s_btn_home, 4);
     lv_obj_add_event_cb(s_btn_home, nav_home_event, LV_EVENT_CLICKED, nullptr);
     lv_obj_t* lbl_h = lv_label_create(s_btn_home);
     lv_label_set_text(lbl_h, LV_SYMBOL_HOME);
@@ -78,6 +80,7 @@ void nav_bar_init() {
     s_btn_quick = lv_btn_create(s_nav_cont);
     lv_obj_remove_style_all(s_btn_quick);
     lv_obj_set_size(s_btn_quick, 64, 22);
+    lv_obj_set_ext_click_area(s_btn_quick, 4);
     lv_obj_add_event_cb(s_btn_quick, nav_quick_event, LV_EVENT_CLICKED, nullptr);
     lv_obj_t* lbl_q = lv_label_create(s_btn_quick);
     lv_label_set_text(lbl_q, LV_SYMBOL_SETTINGS);

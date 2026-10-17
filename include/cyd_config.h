@@ -98,7 +98,7 @@ public:
             cfg.pin_mosi   = PIN_TOUCH_DIN;  // GPIO 32 (T_DIN)
             cfg.pin_miso   = PIN_TOUCH_DOUT; // GPIO 39 (T_OUT)
             cfg.pin_cs     = PIN_TOUCH_CS;   // GPIO 33 (T_CS)
-            cfg.freq       = 1000000;        // 1 MHz SPI clock for stable touch sampling
+            cfg.freq       = 2500000;        // 2.5 MHz SPI clock for fast touch sampling
             cfg.spi_host   = -1;             // -1: Use bit-banged Software SPI
             _touch_instance.config(cfg);
             _panel_instance.setTouch(&_touch_instance);
