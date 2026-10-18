@@ -24,6 +24,15 @@
 #define CYD_DISPLAY_DRIVER DRIVER_ST7789
 #endif
 
+// Touch coordinate inversion (Invert both X and Y as requested)
+#ifndef CYD_TOUCH_INVERT_X
+#define CYD_TOUCH_INVERT_X true
+#endif
+
+#ifndef CYD_TOUCH_INVERT_Y
+#define CYD_TOUCH_INVERT_Y true
+#endif
+
 
 // ==========================================================================
 // LovyanGFX Device Template (Matched with verified hardware profile)

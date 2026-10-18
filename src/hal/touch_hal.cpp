@@ -33,9 +33,17 @@ static void lvgl_touch_read_cb(lv_indev_drv_t *drv, lv_indev_data_t *data) {
     bool touched = g_display.getTouch(&tx, &ty);
 
     if (touched) {
-        // Clamp coordinates within panel dimensions
+        // Clamp raw coordinates within panel dimensions first
         if (tx >= DISPLAY_WIDTH)  tx = DISPLAY_WIDTH - 1;
         if (ty >= DISPLAY_HEIGHT) ty = DISPLAY_HEIGHT - 1;
+
+        // Invert touch axes as requested
+#if CYD_TOUCH_INVERT_X
+        tx = (DISPLAY_WIDTH - 1) - tx;
+#endif
+#if CYD_TOUCH_INVERT_Y
+        ty = (DISPLAY_HEIGHT - 1) - ty;
+#endif
 
         s_last_x = (int16_t)tx;
         s_last_y = (int16_t)ty;
