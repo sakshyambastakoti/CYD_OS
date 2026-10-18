@@ -47,27 +47,11 @@ bool storage_init() {
     s_settings.volume             = s_prefs.getUChar("volume", 80);
     s_settings.audio_muted        = s_prefs.getBool("muted", false);
     s_settings.clock_24h          = s_prefs.getBool("clk24", true);
-    s_settings.touch_calibrated   = s_prefs.getBool("cal_ok", false);
-
-    if (s_settings.touch_calibrated) {
-        size_t len = s_prefs.getBytes("cal_data", s_settings.touch_cal, sizeof(s_settings.touch_cal));
-        bool valid = (len == sizeof(s_settings.touch_cal));
-        if (valid) {
-            for (int i = 0; i < 8; i++) {
-                if (s_settings.touch_cal[i] < 100 || s_settings.touch_cal[i] > 4000) {
-                    valid = false;
-                    break;
-                }
-            }
-        }
-        if (!valid) {
-            Serial.println("[STORAGE] Stored touch calibration was invalid or zeroed. Discarding.");
-            s_settings.touch_calibrated = false;
-            memset(s_settings.touch_cal, 0, sizeof(s_settings.touch_cal));
-            s_prefs.putBool("cal_ok", false);
-            s_prefs.remove("cal_data");
-        }
-    }
+    // Ensure clean native hardware defaults
+    s_prefs.remove("cal_data");
+    s_prefs.putBool("cal_ok", false);
+    s_settings.touch_calibrated = false;
+    memset(s_settings.touch_cal, 0, sizeof(s_settings.touch_cal));
 
     String ssid = s_prefs.getString("wifi_ssid", "");
     String pass = s_prefs.getString("wifi_pass", "");

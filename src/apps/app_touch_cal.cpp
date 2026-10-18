@@ -58,9 +58,8 @@ void TouchCalApp::reset_calibration_cb(lv_event_t* e) {
     memset(settings.touch_cal, 0, sizeof(settings.touch_cal));
     Services::storage_save();
 
-    // Re-apply default hardware calibration profile
-    // [TL_X, TL_Y, BL_X, BL_Y, TR_X, TR_Y, BR_X, BR_Y]
-    uint16_t default_cal[8] = { 200, 3800, 200, 240, 3850, 3800, 3850, 240 };
+    // Re-apply default native hardware calibration profile
+    uint16_t default_cal[8] = { 300, 3700, 300, 200, 3900, 3700, 3900, 200 };
     HAL::touch_set_calibration(default_cal);
 
     if (app->m_lbl_status) {
